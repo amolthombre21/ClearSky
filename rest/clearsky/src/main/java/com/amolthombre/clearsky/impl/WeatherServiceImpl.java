@@ -11,57 +11,60 @@ import com.amolthombre.clearsky.repository.WeatherReadingRepository;
 import com.amolthombre.clearsky.service.WeatherReadingService;
 
 @Service
-public class WeatherServiceImpl implements WeatherReadingService{
-	
-	WeatherReadingRepository weatherReadingRepository;
-	
-	public WeatherServiceImpl(WeatherReadingRepository weatherReadingRepository) {
-		this.weatherReadingRepository = weatherReadingRepository;
-	}
+public class WeatherServiceImpl implements WeatherReadingService {
 
-	@Override
-	@Transactional
-	public WeatherReading create(WeatherReading weatherReading) {
-		return weatherReadingRepository.create(weatherReading);
-	}
+    WeatherReadingRepository weatherReadingRepository;
 
-	@Override
-	public List<String> listOfCities() {
-		return weatherReadingRepository.listOfCities();
-	}
+    public WeatherServiceImpl(WeatherReadingRepository weatherReadingRepository) {
+        this.weatherReadingRepository = weatherReadingRepository;
+    }
 
-	@Override
-	public WeatherReading weatherForGivenCity(String city) {
-		return weatherReadingRepository.weatherForGivenCity(city);
-	}
+    @Override
+    @Transactional
+    public WeatherReading create(WeatherReading weatherReading) {
+        return weatherReadingRepository.create(weatherReading);
+    }
 
-	@Override
-	public WeatherReading getPropertyForCity(String city, String property) {
-		return null;
-	}
+    @Override
+    public List<String> listOfCities() {
+        return weatherReadingRepository.listOfCities();
+    }
 
-	@Override
-	public int getWeatherPropertyForCity(String city, String property) throws Exception {
-		WeatherReading weatherReading =  weatherForGivenCity(city);
-		int specificProperty;
-		if(property.equals("humidity"))
-			specificProperty = weatherReading.getHumidity();
-		else if(property.equals("pressure"))
-			specificProperty = weatherReading.getPressure();
-		else if(property.equals("temperature"))
-			specificProperty = weatherReading.getTemperature();
-		else
-			throw new Exception();
-		return specificProperty;
-	}
+    @Override
+    public WeatherReading weatherForGivenCity(String city) throws Exception {
+        final WeatherReading weatherReading = weatherReadingRepository
+                .weatherForGivenCity(city);
+        if (weatherReading != null)
+            return weatherReading;
+        else
+            throw new Exception();
+    }
 
-	@Override
-	public List<AverageWeather> getAverageWeatherForCity(String city, String grain) {
-		if(grain.equals("hourly"))
-			return weatherReadingRepository.getHourlyAverageWeatherForCity(city);
-		else if(grain.equals("daily"))
-			return weatherReadingRepository.getDailyAverageWeatherForCity(city);
-		else
-			return null;
-	}	 
+    @Override
+    public int getWeatherPropertyForCity(String city, String property)
+            throws Exception {
+        WeatherReading weatherReading = weatherForGivenCity(city);
+        int specificProperty;
+        if (property.equals("humidity"))
+            specificProperty = weatherReading.getHumidity();
+        else if (property.equals("pressure"))
+            specificProperty = weatherReading.getPressure();
+        else if (property.equals("temperature"))
+            specificProperty = weatherReading.getTemperature();
+        else
+            throw new Exception();
+        return specificProperty;
+    }
+
+    @Override
+    public List<AverageWeather> getAverageWeatherForCity(String city,
+            String grain) throws Exception {
+        if (grain.equals("hourly"))
+            return weatherReadingRepository
+                    .getHourlyAverageWeatherForCity(city);
+        else if (grain.equals("daily"))
+            return weatherReadingRepository.getDailyAverageWeatherForCity(city);
+        else
+            throw new Exception();
+    }
 }

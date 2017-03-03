@@ -17,31 +17,33 @@ import com.amolthombre.clearsky.entity.WeatherReading;
 import com.amolthombre.clearsky.repository.WeatherReadingRepository;
 
 @Repository
-public class WeatherReadingRepositoryImpl implements WeatherReadingRepository{
-	
-	@PersistenceContext
-	private EntityManager entityManager;
+public class WeatherReadingRepositoryImpl implements WeatherReadingRepository {
 
-	@Override
-	public WeatherReading create(WeatherReading weatherReading) {
-		entityManager.persist(weatherReading.getWind());
-		weatherReading.setWind(weatherReading.getWind());
-		entityManager.persist(weatherReading);
-		return weatherReading;
-	}
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Override
-	public List<String> listOfCities() {
-		Query query = entityManager.createNamedQuery("WeatherReading.allCities");
-		return query.getResultList();
-	}
+    @Override
+    public WeatherReading create(WeatherReading weatherReading) {
+        entityManager.persist(weatherReading.getWind());
+        weatherReading.setWind(weatherReading.getWind());
+        entityManager.persist(weatherReading);
+        return weatherReading;
+    }
 
-	@Override
-	public WeatherReading weatherForGivenCity(String city) {
-		TypedQuery<WeatherReading> query = entityManager.createNamedQuery("WeatherReading.city", WeatherReading.class);
-		query.setParameter("givenCity",city);
-		return query.getResultList().get(0);
-	}
+    @Override
+    public List<String> listOfCities() {
+        Query query = entityManager
+                .createNamedQuery("WeatherReading.allCities");
+        return query.getResultList();
+    }
+
+    @Override
+    public WeatherReading weatherForGivenCity(String city) {
+        TypedQuery<WeatherReading> query = entityManager.createNamedQuery(
+                "WeatherReading.city", WeatherReading.class);
+        query.setParameter("givenCity", city);
+        return query.getResultList().get(0);
+    }
 
 	@Override
 	public List<AverageWeather> getHourlyAverageWeatherForCity(String city) {

@@ -9,7 +9,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
-
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "WeatherReading.allCities", query = "select distinct wr.city from WeatherReading wr"),
